@@ -15,6 +15,8 @@ std::vector<int> Manacher(const std::string& t) {
     return f;
 }
 
+// 回文长度 f[i] - 1, 回文半径 f[i] / 2
+// 求出来的是最长回文串, 需要额外处理得到所有回文串
 std::vector<std::array<int, 2>> prase(const std::vector<int> f) {
     std::vector<std::array<int, 2>> ans;
     for (int i = 0; i < (int) f.size(); ++i) {
