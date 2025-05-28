@@ -3,17 +3,14 @@
 struct AhoCorasick {
     static constexpr int SIGMA = 26;
     struct Node {
-        int len;
-        int link;
+        int len, fail;
         std::array<int, SIGMA> next;
-        Node() : len{0}, link{0}, next{} {}
+        Node() : len(0), fail(0), next{} {}
     };
 
     std::vector<Node> t;
     
-    AhoCorasick() {
-        init();
-    }
+    AhoCorasick() { init(); }
     
     void init() {
         t.assign(2, Node());
@@ -26,9 +23,9 @@ struct AhoCorasick {
         return t.size() - 1;
     }
     
-    int add(const std::string &a) {
+    int add(const std::string& s) {
         int p = 1;
-        for (auto c : a) {
+        for (auto c : s) {
             int x = c - 'a';
             if (t[p].next[x] == 0) {
                 t[p].next[x] = newNode();
@@ -49,9 +46,9 @@ struct AhoCorasick {
             
             for (int i = 0; i < SIGMA; i++) {
                 if (t[x].next[i] == 0) {
-                    t[x].next[i] = t[t[x].link].next[i];
+                    t[x].next[i] = t[t[x].fail].next[i];
                 } else {
-                    t[t[x].next[i]].link = t[t[x].link].next[i];
+                    t[t[x].next[i]].fail = t[t[x].fail].next[i];
                     q.push(t[x].next[i]);
                 }
             }
@@ -62,8 +59,8 @@ struct AhoCorasick {
         return t[p].next[x];
     }
     
-    int link(int p) {
-        return t[p].link;
+    int fail(int p) {
+        return t[p].fail;
     }
     
     int len(int p) {
