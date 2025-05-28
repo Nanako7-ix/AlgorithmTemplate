@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 
 struct AhoCorasick {
-    static constexpr int ALPHABET = 26;
+    static constexpr int SIGMA = 26;
     struct Node {
         int len;
         int link;
-        std::array<int, ALPHABET> next;
+        std::array<int, SIGMA> next;
         Node() : len{0}, link{0}, next{} {}
     };
-    
+
     std::vector<Node> t;
     
     AhoCorasick() {
@@ -47,7 +47,7 @@ struct AhoCorasick {
             int x = q.front();
             q.pop();
             
-            for (int i = 0; i < ALPHABET; i++) {
+            for (int i = 0; i < SIGMA; i++) {
                 if (t[x].next[i] == 0) {
                     t[x].next[i] = t[t[x].link].next[i];
                 } else {
