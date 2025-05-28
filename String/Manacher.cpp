@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-std::vector<int> Manacher(const std::string& t) {
+auto Manacher(const std::string& t) {
     std::string s = "#";
     for (auto c : t) {
         s += c, s += '#';
@@ -10,19 +10,13 @@ std::vector<int> Manacher(const std::string& t) {
     for (int i = 0, j = 0; i < n; ++i) {
         f[i] = i < j + f[j] ? std::min(f[2 * j - i], j + f[j] - i) : 1;
         while (i + f[i] < n && i - f[i] >= 0 && s[i + f[i]] == s[i - f[i]]) ++f[i];
-        if (i + f[i] > j + f[j]) j = i;
+        if (i + f[i] > j + f[j]) {
+            for (int k = std::max(i, j + f[j]); k < i + f[i]; ++k) {
+                auto [l, r] = std::array { i - k / 2 , (k - 1) / 2 };
+                if (l % 2 == 1 || r % 2 == 1) continue;
+            }
+            j = i;
+        }
+        auto [l, r] = std::array { (i - f[i] + 1) / 2, (i + f[i]) / 2 - 1 };
     }
-    return f;
-}
-
-// 回文长度 f[i] - 1, 回文半径 f[i] / 2
-// 求出来的是最长回文串, 需要额外处理得到所有回文串
-std::vector<std::array<int, 2>> prase(const std::vector<int> f) {
-    std::vector<std::array<int, 2>> ans;
-    for (int i = 0; i < (int) f.size(); ++i) {
-        int l = (i - f[i] + 1) / 2;
-        int r = (i + f[i]) / 2 - 1;
-        if (l <= r) ans.push_back({l, r});
-    }
-    return ans;
 }
