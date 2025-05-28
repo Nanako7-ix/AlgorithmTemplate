@@ -23,7 +23,7 @@ struct AhoCorasick {
         return t.size() - 1;
     }
     
-    int add(const std::string& s) {
+    int insert(const std::string& s) {
         int p = 1;
         for (auto c : s) {
             int x = c - 'a';
