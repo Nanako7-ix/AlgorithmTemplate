@@ -12,8 +12,8 @@ auto Manacher(const std::string& t) {
         while (i + f[i] < n && i - f[i] >= 0 && s[i + f[i]] == s[i - f[i]]) ++f[i];
         if (i + f[i] > j + f[j]) {
             for (int k = std::max(i, j + f[j]); k < i + f[i]; ++k) {
+                if (s[k] != '#') continue;
                 auto [l, r] = std::array { i - k / 2 , (k - 1) / 2 };
-                if (l % 2 == 1 || r % 2 == 1) continue;
             }
             j = i;
         }

@@ -67,7 +67,7 @@ struct Hashing {
         assert(l < r);
         return {
             (h[0][r] - h[0][l] * p(0, r - l) % Mod[0] + Mod[0]) % Mod[0],
-            (h[1][r] - h[1][l] * p(0, r - l) % Mod[1] + Mod[1]) % Mod[1],
+            (h[1][r] - h[1][l] * p(1, r - l) % Mod[1] + Mod[1]) % Mod[1],
         };
     }
 };
