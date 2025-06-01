@@ -14,7 +14,7 @@ struct SuffixAutomaton {
     SuffixAutomaton () { init(); }
 
     void init() {
-        t.assign(2, Node());
+        t.assign(2, Node {});
         t[0].next.fill(1);
         t[0].len = -1;
     }
@@ -30,7 +30,6 @@ struct SuffixAutomaton {
             if (t[q].len == t[p].len + 1) {
                 return q;
             }
-
             int r = newNode();
             t[r].len = t[p].len + 1;
             t[r].link = t[q].link;
