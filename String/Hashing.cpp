@@ -1,11 +1,12 @@
 #include <bits/stdc++.h>
 using i64 = long long;
 
+std::array<i64, 2> Mod { 224247619,566424149 };
+std::array<i64, 2> base { 131,13331 };
+
 struct Hashing {
     static int n;
-    static std::array<i64, 2> Mod;
     static std::array<std::vector<i64>, 2> f;
-    constexpr static std::array<i64, 2> base { 131,13331 };
 
     static void init (int m) {
         if(m <= n) return;
@@ -16,27 +17,6 @@ struct Hashing {
             f[1][i] = f[1][i - 1] * base[1] % Mod[1];
         }
         n = 2 * m;
-    }
-
-    static bool isPrime (i64 n) {
-        if (n <= 2) return false;
-        for (i64 i = 2; i * i <= n; ++i) {
-            if (n % i == 0) return false;
-        }
-        return true;
-    }
-
-    static i64 findPrime (int n) {
-        while (!isPrime(n)) n++;
-        return n;
-    }
-    
-    static std::array<i64, 2> findPrime () {
-        std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
-        return {
-            findPrime(rng() % 900'000'000 + 100'000'000),
-            findPrime(rng() % 900'000'000 + 100'000'000)
-        };
     }
     
     static i64 p (int i, int n) {
@@ -73,11 +53,9 @@ struct Hashing {
 };
 
 int Hashing::n = 1;
-std::array<i64, 2> Hashing::Mod = Hashing::findPrime();
 std::array<std::vector<i64>, 2> Hashing::f {
     std::vector {1LL}, std::vector {1LL}
 };
-template<int x> i64 Mod = Hashing::Mod[x];
 
 /**
  * 3E2:  179 191 211 227 251 311 313 347 349 353 379 389 397 419
