@@ -41,14 +41,14 @@ struct SuffixAutomaton {
             }
             return r;
         }
-    
+
         int cur = newNode();
         t[cur].len = t[p].len + 1;
         while (!t[p].next[c]) {
             t[p].next[c] = cur;
             p = t[p].link;
         }
-    
+
         t[cur].link = extend(p, c);
         return cur;
     }
