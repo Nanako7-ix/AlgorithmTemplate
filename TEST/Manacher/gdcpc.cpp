@@ -45,6 +45,7 @@ auto Manacher(const std::string& t, char wildcard = '*') {
     for (auto c : t) {
         s += c, s += '#';
     }
+
     auto check = [&](char x, char y) {
         return x == y || x == wildcard || y == wildcard;
     };
