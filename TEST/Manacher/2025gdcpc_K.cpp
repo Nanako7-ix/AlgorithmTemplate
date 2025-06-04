@@ -15,11 +15,8 @@ using f64 = double;
 using f128 = __float128;
 using namespace std;
 
-auto Manacher(const std::string& s, char wildcard = '*') {
-    auto check = [&](char x, char y) {
-        return x == y || x == wildcard || y == wildcard;
-    };
-
+template<typename Func = std::equal_to<char>>
+auto Manacher(const std::string& s, Func&& check = Func {}) {
     int n = s.size();
     std::vector<int> f(n), ans(n, 0);
     for (int i = 0, j = 0; i < n; ++i) {
