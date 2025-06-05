@@ -23,6 +23,7 @@ struct SAM {
         Node() : len(), link(), next() {}
     };
 
+    i64 sum = 0;
     std::vector<Node> t;
 
     SAM () { init(); }
@@ -55,15 +56,16 @@ struct SAM {
             }
             return r;
         }
-    
+
         int cur = newNode();
         t[cur].len = t[p].len + 1;
         while (!t[p].next[c]) {
             t[p].next[c] = cur;
             p = t[p].link;
         }
-    
+
         t[cur].link = extend(p, c);
+        sum += t[cur].len - t[t[cur].link].len;
         return cur;
     }
 
@@ -82,6 +84,10 @@ struct SAM {
     int size() {
         return t.size();
     }
+
+    int substr() {
+        return sum;
+    }
 };
 
 void solve() {
@@ -92,7 +98,9 @@ void solve() {
     int p = 1;
     for (auto c : s) {
         p = sam.extend(p, c - 'a');
+        std::cout << sam.substr() << " ";
     }
+    std::cout << "\n";
 
     int m = sam.size() - 1;
     std::vector<int> siz(m + 1);
