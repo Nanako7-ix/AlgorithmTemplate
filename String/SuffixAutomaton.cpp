@@ -9,6 +9,7 @@ struct SuffixAutomaton {
         Node() : len(), link(), next() {}
     };
 
+    int substr;
     std::vector<Node> t;
 
     SuffixAutomaton () { init(); }
@@ -17,6 +18,7 @@ struct SuffixAutomaton {
         t.assign(2, Node {});
         t[0].next.fill(1);
         t[0].len = -1;
+        substr = 0;
     }
 
     int newNode() {
@@ -50,6 +52,7 @@ struct SuffixAutomaton {
         }
 
         t[cur].link = extend(p, c);
+        substr += t[cur].len - t[t[cur].link].len;
         return cur;
     }
 
@@ -67,5 +70,9 @@ struct SuffixAutomaton {
     
     int size() {
         return t.size();
+    }
+
+    int count () {
+        return substr;
     }
 };
