@@ -25,14 +25,13 @@ struct SuffixAutomaton {
         Node() : len(), link(), next() {}
     };
 
-    int substr;
+    i64 substr;
     std::vector<Node> t;
 
     SuffixAutomaton () { init(); }
 
     void init() {
         t.assign(2, Node {});
-        // t[0].next.fill(1);
         t[0].len = -1;
         substr = 0;
     }
@@ -43,8 +42,8 @@ struct SuffixAutomaton {
     }
 
     int extend(int p, int c) {
-        if (t[p].next[c]) {
-            int q = t[p].next[c];
+        if (t[p].next.contains(c) && t[p].next.at(c)) {
+            int q = t[p].next.at(c);
             if (t[q].len == t[p].len + 1) {
                 return q;
             }
@@ -53,8 +52,8 @@ struct SuffixAutomaton {
             t[r].link = t[q].link;
             t[r].next = t[q].next;
             t[q].link = r;
-            while (t[p].next[c] == q) {
-                t[p].next[c] = r;
+            while (t[p].next.contains(c) && t[p].next.at(c) == q) {
+                t[p].next.at(c) = r;
                 p = t[p].link;
             }
             return r;
@@ -62,12 +61,12 @@ struct SuffixAutomaton {
 
         int cur = newNode();
         t[cur].len = t[p].len + 1;
-        while (!t[p].next[c]) {
+        while (!t[p].next.contains(c) || !t[p].next.at(c)) {
             t[p].next[c] = cur;
             p = t[p].link;
         }
 
-        t[cur].link = extend(p, c);
+        t[cur].link = p == 0 ? 1 : extend(p, c);
         substr += t[cur].len - t[t[cur].link].len;
         return cur;
     }
@@ -81,31 +80,27 @@ struct SuffixAutomaton {
     }
 
     int next(int p, int x) {
-        return t[p].next[x];
+        return t[p].next.contains(x) ? t[p].next[x] : 0;
     }
     
     int size() {
         return t.size();
     }
 
-    int count () {
+    i64 count () {
         return substr;
     }
 };
 
 void solve() {
-    int n;
+    int n, p = 1;
     cin >> n;
-    vector<int> a(n + 1);
+    SuffixAutomaton SAM;
     for (int i = 1; i <= n; ++i) {
-        cin >> a[i];
+        int x; cin >> x;
+        p = SAM.extend(p, x);
+        cout << SAM.count() << "\n";
     }
-
-    auto b = a;
-    sort(b.begin(), b.end());
-    b.erase(unique(b.begin(), b.end()), b.end());
-
-    for (int i)
 }
 
 signed main() {

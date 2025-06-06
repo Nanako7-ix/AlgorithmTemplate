@@ -9,7 +9,7 @@ struct SuffixAutomaton {
         Node() : len(), link(), next() {}
     };
 
-    int substr;
+    i64 substr;
     std::vector<Node> t;
 
     SuffixAutomaton () { init(); }
@@ -72,7 +72,7 @@ struct SuffixAutomaton {
         return t.size();
     }
 
-    int count () {
+    i64 count () {
         return substr;
     }
 };
