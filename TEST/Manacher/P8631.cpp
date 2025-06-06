@@ -1,6 +1,6 @@
 /**
  * Author:  Thephix
- * Created: 2025/05/28 17:56:55
+ * Created: 2025/06/06 17:08:20
  */
 #include <bits/stdc++.h>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -13,6 +13,84 @@ using i128 = __int128;
 using u128 = unsigned __int128;
 using f64 = double;
 using f128 = __float128;
+using namespace std;
+
+struct SuffixAutomaton {
+    static constexpr int N = 26;
+    struct Node {
+        int len;
+        int link;
+        std::array<int, N> next;
+        Node() : len(), link(), next() {}
+    };
+
+    i64 substr;
+    std::vector<Node> t;
+
+    SuffixAutomaton () { init(); }
+
+    void init() {
+        t.assign(2, Node {});
+        t[0].next.fill(1);
+        t[0].len = -1;
+        substr = 0;
+    }
+
+    int newNode() {
+        t.emplace_back();
+        return t.size() - 1;
+    }
+
+    int extend(int p, int c) {
+        if (t[p].next[c]) {
+            int q = t[p].next[c];
+            if (t[q].len == t[p].len + 1) {
+                return q;
+            }
+            int r = newNode();
+            t[r].len = t[p].len + 1;
+            t[r].link = t[q].link;
+            t[r].next = t[q].next;
+            t[q].link = r;
+            while (t[p].next[c] == q) {
+                t[p].next[c] = r;
+                p = t[p].link;
+            }
+            return r;
+        }
+
+        int cur = newNode();
+        t[cur].len = t[p].len + 1;
+        while (!t[p].next[c]) {
+            t[p].next[c] = cur;
+            p = t[p].link;
+        }
+
+        t[cur].link = extend(p, c);
+        substr += t[cur].len - t[t[cur].link].len;
+        return cur;
+    }
+
+    int len(int p) {
+        return t[p].len;
+    }
+
+    int link(int p) {
+        return t[p].link;
+    }
+
+    int next(int p, int x) {
+        return t[p].next[x];
+    }
+    
+    int size() {
+        return t.size();
+    }
+
+    i64 count () {
+        return substr;
+    }
+};
 
 std::array<i64, 2> Mod { 224247619,566424149 };
 std::array<i64, 2> base { 131,13331 };
@@ -70,31 +148,25 @@ std::array<std::vector<i64>, 2> Hashing::f {
     std::vector {1LL}, std::vector {1LL}
 };
 
-auto Manacher(const std::string& t) {
-    Hashing hs(t);
-
-    std::string s = "#";
-    for (auto c : t) {
-        s += c, s += '#';
-    }
-
-    int n = s.size(), m = t.size();
-    std::vector<int> f(n), ans(m + 1);
-    std::set<std::array<i64, 2>> S; 
+template<typename Func = std::equal_to<char>>
+auto Manacher(const std::string& s, Func&& check = Func {}) {
+    int n = s.size();
+    Hashing hs(s);
+    std::vector<int> f(n), ans(n);
+    set<array<i64, 2>> S;
+    ans[0] = S.insert(hs.query(1, 1)).second;
     for (int i = 0, j = 0; i < n; ++i) {
         f[i] = i < j + f[j] ? std::min(f[2 * j - i], j + f[j] - i) : 1;
-        while (i + f[i] < n && i - f[i] >= 0 && s[i + f[i]] == s[i - f[i]]) ++f[i];
+        while (i + f[i] < n && i - f[i] >= 0 && check(s[i + f[i]], s[i - f[i]])) ++f[i];
         if (i + f[i] > j + f[j]) {
             for (int k = std::max(i, j + f[j]); k < i + f[i]; ++k) {
-                if (s[k] != '#') continue;
-                auto [l, r] = std::array { i - k / 2 , (k - 1) / 2 };
-                if ((r - l + 1) % 2 == 1) continue;
-                ans[r + 1] += S.insert(hs.query(l + 1, r + 1)).second;
+                auto [l, r] = std::array { 2 * i - k , k };
+                ans[r] += S.insert(hs.query(l + 1, r + 1)).second;
             }
             j = i;
         }
     }
-    for (int i = 1; i <= m; ++i) {
+    for (int i = 1; i < n; ++i) {
         ans[i] += ans[i - 1];
     }
     return ans;
@@ -102,17 +174,20 @@ auto Manacher(const std::string& t) {
 
 void solve() {
     int n;
-    std::string s;
-    std::cin >> n >> s;
+    string s;
+    cin >> n >> s;
+    vector l(Manacher(s));
 
-    auto l = Manacher(s);
-    std::reverse(s.begin(), s.end());
-    auto r = Manacher(s);
+    reverse(s.begin(), s.end());
+    vector r(Manacher(s));
 
-    for (int i = 1; i <= n; ++i) {
-        std::cout << l[i] << " \n"[i == n];
+    i64 p = 1, ans;
+    SuffixAutomaton SAM;
+    for (int i = 0; i < n - 1; ++i) {
+        p = SAM.extend(p, s[i] - 'a');
+        ans = max(ans, l[n - i - 2] * (SAM.count() - r[i]));
     }
-    
+    cout << ans << "\n";
 }
 
 signed main() {
