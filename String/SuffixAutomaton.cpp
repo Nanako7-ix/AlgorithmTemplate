@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+using i64 = long long;
 
 struct SuffixAutomaton {
     static constexpr int N = 26;
