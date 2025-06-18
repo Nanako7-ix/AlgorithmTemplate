@@ -1,42 +1,26 @@
 #include <bits/stdc++.h>
 
-template<typename Func = std::equal_to<char>>
-auto Manacher(const std::string& t, Func check) {
+struct Null { void operator() (int l, int r) {} };
+
+template<typename F, typename G>
+std::vector<int> Manacher(const std::string& t, F&& f, G&& g) {
     std::string s = "#";
-    for (auto c : t) {
-        s += c, s += '#';
-    }
+    for (auto c : t) s += c, s += '#';
 
     int n = s.size();
-    std::vector<int> f(n);
+    std::vector<int> d(n);
     for (int i = 0, j = 0; i < n; ++i) {
-        f[i] = i < j + f[j] ? std::min(f[2 * j - i], j + f[j] - i) : 1;
-        while (i + f[i] < n && i - f[i] >= 0 && check(s[i + f[i]], s[i - f[i]])) ++f[i];
-        if (i + f[i] > j + f[j]) {
-            for (int k = std::max(i, j + f[j]); k < i + f[i]; ++k) {
+        d[i] = i < j + d[j] ? std::min(d[2 * j - i], j + d[j] - i) : 1;
+        while (i + d[i] < n && i - d[i] >= 0 && s[i + d[i]] == s[i - d[i]]) ++d[i];
+        if (i + d[i] > j + d[j]) {
+            for (int k = std::max(i, j + d[j]); k < i + d[i]; ++k) {
                 if (s[k] != '#') continue;
-                auto [l, r] = std::array { i - k / 2 , (k - 1) / 2 };
+                f(i - k / 2 + 1 , (k - 1) / 2 + 1);
             }
             j = i;
         }
-        auto [l, r] = std::array { (i - f[i] + 1) / 2, (i + f[i]) / 2 - 1 };
-        if (l > r) continue;
+        auto [l, r] = std::array { (i - d[i] + 1) / 2, (i + d[i]) / 2 - 1 };
+        if (l <= r) g(l + 1, r + 1);
     }
-}
-
-template<typename Func = std::equal_to<char>>
-auto Manacher(const std::string& s, Func&& check = Func {}) {
-    int n = s.size();
-    std::vector<int> f(n);
-    for (int i = 0, j = 0; i < n; ++i) {
-        f[i] = i < j + f[j] ? std::min(f[2 * j - i], j + f[j] - i) : 1;
-        while (i + f[i] < n && i - f[i] >= 0 && check(s[i + f[i]], s[i - f[i]])) ++f[i];
-        if (i + f[i] > j + f[j]) {
-            for (int k = std::max(i, j + f[j]); k < i + f[i]; ++k) {
-                auto [l, r] = std::array { 2 * i - k , k };
-            }
-            j = i;
-        }
-        auto [l, r] = std::array { i - f[i] + 1, i + f[i] - 1 };
-    }
+    return d;
 }
