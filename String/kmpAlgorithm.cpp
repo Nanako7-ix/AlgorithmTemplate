@@ -24,3 +24,7 @@ auto match(std::string s, kmpAlgorithm& p) {
     }
     return ans;
 }
+
+auto getFail (std::string s) {
+    return kmpAlgorithm(s).fail;
+}
