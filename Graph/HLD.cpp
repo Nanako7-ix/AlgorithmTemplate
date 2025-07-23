@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 
 /**
- * ds(dfn(*)) = a(*)
- * ds(*) = a(idfn(*))
+ * ds[dfn[*]] = a[*]
+ * ds[*] = a[idfn[*]]
  */
 
 struct HLD {
