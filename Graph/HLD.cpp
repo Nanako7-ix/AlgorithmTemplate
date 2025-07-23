@@ -90,21 +90,21 @@ struct HLD {
         modify(dfn[u], dfn[u] + siz[u] - 1);
     }
     template<typename Func, typename T = std::invoke_result_t<Func, int, int>>
-    T query(int u, int v, Func query) {
-        T res {};
-        while(top[u] != top[v]) {
-            if(dep[top[u]] > dep[top[v]]) {
-                res = res + query(dfn[top[u]], dfn[u]);
+    T query(int u, int v, Func query, T res = {}) {
+        while (top[u] != top[v]) {
+            if (dep[top[u]] > dep[top[v]]) {
+                res = query(dfn[top[u]], dfn[u]) + res;
                 u = fa[top[u]];
             } else {
-                res = res + query(dfn[top[v]], dfn[v]);
+                res = query(dfn[top[v]], dfn[v]) + res;
                 v = fa[top[v]];
             }
         }
-        if(dep[u] < dep[v]) {
-            res = res + query(dfn[u], dfn[v]);
-        } else res = res + query(dfn[v], dfn[u]);
-        return res;
+        if (dep[u] < dep[v]) {
+            return query(dfn[u], dfn[v]) + res;
+        } else {
+            return query(dfn[v], dfn[u]) + res;
+        }
     }
     template<typename Func, typename T = std::invoke_result_t<Func, int, int>>
     T query(int u, Func query) {
