@@ -1,3 +1,5 @@
+#include <bits/stdc++.h>
+
 #define ls(u) (u << 1)
 #define rs(u) (u << 1 | 1)
 template<typename Info, typename Tag>
@@ -82,7 +84,7 @@ struct LazySegmentTree {
         push(u);
         int m = (l + r) >> 1;
         if (L <= m) modify(L, R, v, ls(u), l, m);
-        if (R > m) modify(L, R, v, rs(u), m + 1, r);
+        if (R > m)  modify(L, R, v, rs(u), m + 1, r);
         pull(u);
     }
 
