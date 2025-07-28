@@ -1,23 +1,18 @@
 #include <bits/stdc++.h>
-#define ls (u << 1)
-#define rs (u << 1 | 1)
 
 // 线段树优化建图, 处理区间连边问题
 // [l, r] -> v
+#define ls (u << 1)
+#define rs (u << 1 | 1)
 template<typename Func>
 struct SegmentGraph {
     int n;
     std::vector<int> p;
-    Func&& add;
+    Func add;
     
     SegmentGraph() = default;
     
-    SegmentGraph(int n, Func&& F) {
-        init(n, F);
-    }
-
-    void init(int n, Func&& F) {
-        this -> add = F;
+    SegmentGraph(int n, Func&& F) : add(F) {
         this -> n = n;
         p.assign(n + 1, 0);
         build(1, 1, n);
@@ -31,22 +26,24 @@ struct SegmentGraph {
         int m = (l + r) >> 1;
         build(ls, l, m);
         build(rs, m + 1, r);
-        add(ls, u), add(rs, u);
+        add(u, ls), add(u, rs);
     }
 
     void link(int L, int R, int v, int u, int l, int r) {
         if (L <= l && r <= R) {
-            return void(add(u, p[v]));
+            return void(add(p[v], u));
         }
         int m = (l + r) >> 1;
         if (L <= m) link(L, R, v, ls, l, m);
         if (R > m)  link(L, R, v, rs, m + 1, r);
     }
 
-    void link(int l, int r, int v) {
+    void link(int v, int l, int r) {
         link(l, r, v, 1, 1, n);
     }
 };
+#undef ls
+#undef rs
 
 // v -> [l, r]
 // struct SegmentGraph {
