@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 
 using u32  = unsigned;
+using i64  = long long;
 using u64  = unsigned long long;
 using u128 = unsigned __int128;
 
@@ -16,8 +17,7 @@ public:
     constexpr U val() const { return x; }
     constexpr static int mod() { return Mod; }
     constexpr ModInt operator-() const { return x == 0 ? 0 : Mod - x; }
-    constexpr ModInt inv() const { return pow(Mod - 2); }
-    constexpr ModInt pow(i64 b) const { ModInt res = 1, a = *this; for (; b; b >>= 1, a *= a) if (b & 1) res *= a; return res; }
+    constexpr ModInt inv() const { return pow(Mod - 2); }                   
     constexpr ModInt& operator+=(const ModInt& rhs) & { x += rhs.val(); if(x >= Mod) x -= Mod; return *this; }
     constexpr ModInt& operator-=(const ModInt& rhs) & { x -= rhs.val(); if(x >= Mod) x += Mod; return *this; }
     constexpr ModInt& operator*=(const ModInt& rhs) & { x = mulMod<Mod>(x, rhs.val()); return *this; }
@@ -29,6 +29,14 @@ public:
     friend constexpr std::strong_ordering operator<=>(const ModInt &lhs, const ModInt &rhs) = default;
     friend std::istream& operator>>(std::istream& is, ModInt& a) { i64 x; is >> x; a = ModInt(x); return is; }
     friend std::ostream& operator<<(std::ostream& os, const ModInt& a) { os << a.val(); return os; }
+    constexpr ModInt pow(i64 b) const {
+        ModInt res = 1, a = *this;
+        b = (b % (Mod - 1) + Mod - 1) % (Mod - 1);
+        for (; b; b >>= 1, a *= a) {
+            if (b & 1) res *= a;
+        }
+        return res;
+    }
 private:
     U x;
 };
