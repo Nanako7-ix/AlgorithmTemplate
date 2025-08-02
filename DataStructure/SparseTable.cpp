@@ -45,3 +45,7 @@ struct SparseTable {
         return res;
     }
 };
+
+template<typename Iterator, typename Func>
+SparseTable (const Iterator&, const Iterator&, Func&&) ->
+SparseTable<typename std::iterator_traits<Iterator>::value_type, Func>;
