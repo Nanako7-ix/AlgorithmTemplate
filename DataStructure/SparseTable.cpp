@@ -32,18 +32,6 @@ struct SparseTable {
         int k = std::__lg(r - l + 1);
         return op(st[k][l], st[k][r - (1 << k) + 1]);
     }
-
-    T query (int l, int r) {
-        T res {};  
-        int len = r - l + 1;
-        for (int i = 0, k = l; i <= std::__lg(len); ++i) {
-            if(len >> i & 1) {
-                res = k == l ? st[i][l] : op(res, st[i][k]);
-                k += 1 << i;
-            }
-        }
-        return res;
-    }
 };
 
 template<typename Iterator, typename Func>
