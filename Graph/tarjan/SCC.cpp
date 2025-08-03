@@ -7,8 +7,8 @@ struct SCC {
     std::vector<int> dfn, low, bel;
     int cur, cnt;
     
-    SCC () = default;
-    SCC (int n) { init(n); }
+    SCC() = default;
+    SCC(int n) { init(n); }
     
     void init(int n) {
         this -> n = n;
@@ -53,25 +53,16 @@ struct SCC {
         return bel;
     }
     
-    struct Graph {
-        int n;
-        std::vector<std::vector<int>> adj;
-    };
-    
-    Graph getGraph() {
+    auto getGraph() {
         work();
-
-        Graph g;
-        g.n = cnt;
-        g.adj.assign(g.n + 1, {});
+        std::vector<std::vector<int>> adj(cnt + 1);
         for (int u = 1; u <= n; ++u) {
             for (auto v : adj[u]) {
                 if (bel[u] != bel[v]) {
-                    g.adj[bel[u]].push_back(bel[v]);
+                    adj[bel[u]].push_back(bel[v]);
                 }
             }
         }
-        
-        return g;
+        return std::pair { cnt, adj };
     }
 };
