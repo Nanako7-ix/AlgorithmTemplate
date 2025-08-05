@@ -17,7 +17,7 @@ public:
     constexpr U val() const { return x; }
     constexpr static int mod() { return Mod; }
     constexpr ModInt operator-() const { return x == 0 ? 0 : Mod - x; }
-    constexpr ModInt inv() const { return pow(Mod - 2); }                   
+    constexpr ModInt inv() const { return pow(Mod - 2); }
     constexpr ModInt& operator+=(const ModInt& rhs) & { x += rhs.val(); if(x >= Mod) x -= Mod; return *this; }
     constexpr ModInt& operator-=(const ModInt& rhs) & { x -= rhs.val(); if(x >= Mod) x += Mod; return *this; }
     constexpr ModInt& operator*=(const ModInt& rhs) & { x = mulMod<Mod>(x, rhs.val()); return *this; }
