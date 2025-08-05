@@ -29,15 +29,7 @@ public:
     friend constexpr std::strong_ordering operator<=>(const ModInt &lhs, const ModInt &rhs) = default;
     friend std::istream& operator>>(std::istream& is, ModInt& a) { i64 x; is >> x; a = ModInt(x); return is; }
     friend std::ostream& operator<<(std::ostream& os, const ModInt& a) { os << a.val(); return os; }
-    constexpr ModInt pow(i64 b) const {
-        ModInt res = 1, a = *this;
-        if (a == 0) return 0;
-        b = (b % (Mod - 1) + Mod - 1) % (Mod - 1);
-        for (; b; b >>= 1, a *= a) {
-            if (b & 1) res *= a;
-        }
-        return res;
-    }
+    constexpr ModInt pow(i64 b) const { ModInt res = 1, a = *this; for (; b; b >>= 1, a *= a) if (b & 1) res *= a; return res; }
 private:
     U x;
 };
