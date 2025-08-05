@@ -31,6 +31,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const ModInt& a) { os << a.val(); return os; }
     constexpr ModInt pow(i64 b) const {
         ModInt res = 1, a = *this;
+        if (a == 0) return 0;
         b = (b % (Mod - 1) + Mod - 1) % (Mod - 1);
         for (; b; b >>= 1, a *= a) {
             if (b & 1) res *= a;
