@@ -2,7 +2,6 @@
 
 using i64 = long long;
 
-// 你需要预处理出 根号范围内的素数
 std::vector<int> P;
 
 std::vector<int> interval_sieve(i64 l, i64 r) {

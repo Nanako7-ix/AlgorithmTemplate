@@ -102,7 +102,7 @@ struct HLD {
                 v = fa[top[v]];
             }
         }
-        if (dep[u] < dep[v]) {
+        if (dep[u] < dep[v]) {  
             return query(dfn[u], dfn[v]) + res;
         } else {
             return query(dfn[v], dfn[u]) + res;
