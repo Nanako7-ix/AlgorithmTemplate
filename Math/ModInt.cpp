@@ -33,5 +33,3 @@ public:
 private:
     U x;
 };
-
-using Z = ModInt<u32, 998244353>;
