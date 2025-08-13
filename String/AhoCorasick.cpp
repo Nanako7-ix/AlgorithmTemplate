@@ -11,9 +11,8 @@ struct AhoCorasick {
 
     std::vector<Node> t;
     
-    AhoCorasick() { init(); }
-    
-    void init() {
+    AhoCorasick(int n = 0) {
+        t.reserve(n);
         t.assign(2, Node());
         t[0].next.fill(1);
         t[0].len = -1;
