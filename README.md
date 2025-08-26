@@ -18,19 +18,21 @@ $$
 
 ### Manacher
 
-**回文**中判定相等的谓词 $f$ 需要满足的性质是：
+一个字符串成为回文串当且仅当它正着读和反着读相等。令 $\overline{s}$ 为 $s$ 的 reverse，那么 $s$ 是回文串当且仅当 $s = \overline{s}$。
+
+Manacher 可以求出对于 $2n - 1$ 个回文中心的最长回文半径。我们把字符串构造成 $s'$，满足：
 
 $$
+s'_i =
 \begin{cases}
-f(x, x^\prime)\\
-f(y, y^\prime)\\
-f(x, y)\\
+\# & i \bmod 2 \equiv 0\\
+s_\frac{i - 1}{2} & i \bmod 2 \equiv 1
 \end{cases}
-\Rightarrow
-f(y^\prime, x^\prime)
 $$
 
-以我的能力，可以推出一个充分条件是：$f$ 是一个等价谓词。
+所以 Manacher 的一个难点在于 $s'$ 的下标和原字符串的位置的转换：
+
+原字符串的第 $$
 
 ### KMP
 
