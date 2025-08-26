@@ -4,14 +4,14 @@ using i64 = long long;
 std::array<i64, 2> Mod { 224247619,566424149 };
 std::array<i64, 2> base { 131,13331 };
 
-struct Hashing {
+struct Hash {
     static int n;
     static std::array<std::vector<i64>, 2> f;
 
     static void init (int m) {
         if(m <= n) return;
-        f[0].resize(2 * m), f[1].resize(2 * m);
-
+        f[0].resize(2 * m);
+        f[1].resize(2 * m);
         for (int i = n; i < 2 * m; ++i) {
             f[0][i] = f[0][i - 1] * base[0] % Mod[0];
             f[1][i] = f[1][i - 1] * base[1] % Mod[1];
@@ -26,8 +26,8 @@ struct Hashing {
     
     std::array<std::vector<i64>, 2> h;
     
-    Hashing () = default;
-    Hashing (const std::string& s) {
+    Hash () = default;
+    Hash (const std::string& s) {
         init(s);
     }
     
@@ -52,8 +52,8 @@ struct Hashing {
     }
 };
 
-int Hashing::n = 1;
-std::array<std::vector<i64>, 2> Hashing::f {
+int Hash::n = 1;
+std::array<std::vector<i64>, 2> Hash::f {
     std::vector {1LL}, std::vector {1LL}
 };
 

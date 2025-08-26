@@ -2,7 +2,7 @@
 
 // f(a[fa], a[son]) = true
 template<typename Iterator, typename Func, typename = std::_RequireInputIter<Iterator>>
-auto getCartesianTree(const Iterator& l, const Iterator& r, Func&& f) {
+auto CartesianTree(const Iterator& l, const Iterator& r, Func&& f) {
     int n = r - l;
     std::vector<int> ls(n + 1), rs(n + 1), fa(n + 1);
     std::vector<int> stk;
