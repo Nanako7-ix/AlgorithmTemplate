@@ -1,4 +1,5 @@
-```cpp
+#include <bits/stat.h>
+
 #define ls (u << 1)
 #define rs (u << 1 | 1)
 template<typename Info, typename Tag>
@@ -155,4 +156,3 @@ struct LazySegmentTree {
 };
 #undef ls
 #undef rs
-```

@@ -65,6 +65,6 @@ struct EDCC {
 			_adj[bel[u]].push_back(bel[v]);
 			_adj[bel[v]].push_back(bel[u]);
 		}
-		return std::pair {_n, _adj};
+		return std::pair {_n, std::move(_adj)};
 	}
 };

@@ -2,17 +2,7 @@
 using i64 = long long;
 
 struct SAM {
-	static constexpr int N = 26;
-	struct Node {
-		int len;
-		int link;
-		std::array<int, N> next;
-		Node() : len(), link(), next() {}
-	};
-
-	i64 substr;
-	std::vector<Node> t;
-
+public:
 	SAM (int n = 0) {
 		t.reserve(n);
 		t.assign(2, Node {});
@@ -75,4 +65,25 @@ struct SAM {
 	i64 count () {
 		return substr;
 	}
+
+	auto getTree() -> std::vector<std::vector<int>> {
+		int n = t.size();
+		std::vector<std::vector<int>> adj(n);
+		for (int i = 2; i < n; ++i) {
+			adj[t[i].link].push_back(i);
+		}
+		return adj;
+	}
+
+private:
+	static constexpr int N = 26;
+	struct Node {
+		int len;
+		int link;
+		std::array<int, N> next;
+		Node() : len(), link(), next() {}
+	};
+
+	i64 substr;
+	std::vector<Node> t;
 };

@@ -1,4 +1,5 @@
-```cpp
+#include <bits/stdc++.h>
+
 #define ls (u << 1)
 #define rs (u << 1 | 1)
 template<typename Info>
@@ -121,4 +122,3 @@ struct SegmentTree {
 };
 #undef ls
 #undef rs
-```
