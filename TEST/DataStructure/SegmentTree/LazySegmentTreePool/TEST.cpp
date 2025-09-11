@@ -29,7 +29,8 @@ struct LazySegmentTreePool {
 	}
 
 	void pull(int u) {
-		info[u] = (info[ls[u]] + info[rs[u]]).apply(tag[u]);
+		info[u] = info[ls[u]] + info[rs[u]];
+        info[u].apply(tag[u]);
 	}
 
 	int Node(int u) {
@@ -40,6 +41,26 @@ struct LazySegmentTreePool {
 		rs.push_back(rs[u]);
 		return info.size() - 1;
 	}
+
+    template<typename Func>
+    int modify(int p, Func&& op, Tag v, int u, int l, int r) {
+        if (u == 0) u = Node(0);
+        if (l == r) {
+            info[u] = op(info[u], v);
+            return u;
+        }
+        int m = (l + r) >> 1;
+        v.apply(tag[u]);
+        if (p <= m) ls[u] = modify(p, op, v, ls[u], l, m);
+        else rs[u] = modify(p, op, v, rs[u], m + 1, r);
+        pull(u);
+        return u;
+    }
+
+    template<typename Func>
+    [[nodiscard]] int modify(int u, int p, Func&& op) {
+        return modify(p, op, Tag(), u, x, y);
+    }
 
 	int modify(int L, int R, const Tag& v, int u, int l, int r) {
 		if (u == 0) u = Node(0);
@@ -64,9 +85,16 @@ struct LazySegmentTreePool {
 			return info[u];
 		}
 		int m = (l + r) >> 1;
-		if (R <= m) return query(L, R, ls[u], l, m).apply(tag[u]);
-		if (L > m)  return query(L, R, rs[u], m + 1, r).apply(tag[u]);
-		return (query(L, R, ls[u], l, m) + query(L, R, rs[u], m + 1, r)).apply(tag[u]);
+        Info ans;
+		if (R <= m) {
+            ans = query(L, R, ls[u], l, m);
+        } else if (L > m) {
+            ans = query(L, R, rs[u], m + 1, r);
+        } else {
+            ans = query(L, R, ls[u], l, m) + query(L, R, rs[u], m + 1, r);
+        }
+        ans.apply(tag[u]);
+        return ans;
 	}
 	
 	Info query(int u, int l, int r) {
@@ -77,7 +105,7 @@ struct LazySegmentTreePool {
 
 struct Tag {
 	i64 add;
-	Tag (int x = 0) {
+	Tag (i64 x = 0) {
 		add = x;
 	}
 	void apply(const Tag& v) {
@@ -87,13 +115,12 @@ struct Tag {
 
 struct Info {
 	i64 sum, len;
-	Info () { sum = len = 1; }
+	Info () { sum = 0, len = 1; }
 	Info (i64 x) {
 		sum = x, len = 1;
 	}
-	Info apply(const Tag& v) {
+	void apply(const Tag& v) {
 		sum += v.add * len;
-		return *this;
 	}
 };
 
@@ -111,13 +138,26 @@ void Thephix() {
 	LazySegmentTreePool<Info, Tag> seg(1, n);
 	for (int i = 1; i <= n; ++i) {
 		i64 x; cin >> x;
-		rt = seg.modify(rt, i, i, x);
+		rt = seg.modify(rt, i, [&](Info info, Tag tag) {
+            return Info { x - tag.add };
+        });
 	}
-	for (int i = 1; i <= n; ++i) {
-		for (int j = i; j <= n; ++j) {
-			cout << seg.query(rt, i, j).sum << "\n";
-		}
-	}
+	
+    for (int i = 1; i <= m; ++i) {
+        int op, l, r;
+        cin >> op >> l >> r;
+        if (op == 1) {
+            i64 k; cin >> k;
+            if (l < r) {
+                rt = seg.modify(rt, l + 1, r, k);
+            }
+            rt = seg.modify(rt, l, [&](Info info, Tag tag) {
+                return Info { info.sum + k };
+            });
+        } else {
+            cout << seg.query(rt, l, r).sum << "\n";
+        }
+    }
 }
 
 int main() {
