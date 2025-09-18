@@ -12,7 +12,7 @@ auto CartesianTree(const Iterator& l, const Iterator& r, Func&& f) {
     };
 
     for(int i = 1; i <= n; ++i) {
-        while(!stk.empty() && f(a(i), a(stk.back()))) {
+        while(!stk.empty() && f(a[i - 1], a[stk.back() - 1])) {
             ls[i] = stk.back();
             stk.pop_back();
         }
