@@ -8,43 +8,23 @@ struct SparseTable {
 
 	SparseTable () = default;
 
-	SparseTable (int n) {
-		init(n);
-	}
-
 	template<typename Iter, typename = std::_RequireInputIter<Iter>>
-	SparseTable (const Iter& l, const Iter& r, Func&& f)
-	: op(std::forward<Func> (f)) { init(l, r); }
-
-	template<typename Init, typename Func>
-	SparseTable (int n, Init&& g, Func&& f)
-	: op(std::forward<Func> (f)) { init(n, g); }
-	
-	void init(int n) {
-		this -> n = n;
+	SparseTable (const Iter& l, const Iter& r, Func&& f) : n(r - l), op(f) {
 		st.assign(std::__lg(n) / 2 + 1, std::vector<T> (n + 1));
-	}
-	
-	template<typename Iter, typename = std::_RequireInputIter<Iter>>
-	void init(const Iter& l, const Iter& r) {
-		init(r - l, [&](int p) { return *(l + p - 1); });
-	}
-
-	template<typename Init>
-	void init(int n, Init&& f) {
-		init(n);
 		for (int i = 1; i <= n; ++i) {
-			st[0][i] = f(i);
+			st[0][i] = l[i - 1];
 		}
-		build();
-	}
-	
-	void build() {
 		for (int i = 1; i <= std::__lg(n) / 2; ++i) {
 			for (int j = 1; j + (1 << (i << 1)) - 1 <= n; ++j) {
 				st[i][j] = op(
-					op(st[i - 1][j + 0 * (1 << ((i - 1) << 1))], st[i - 1][j + 1 * (1 << ((i - 1) << 1))]),
-					op(st[i - 1][j + 2 * (1 << ((i - 1) << 1))], st[i - 1][j + 3 * (1 << ((i - 1) << 1))])
+					op(
+						st[i - 1][j + (0 << ((i - 1) << 1))],
+						st[i - 1][j + (1 << ((i - 1) << 1))]
+					),
+					op(
+						st[i - 1][j + (2 << ((i - 1) << 1))],
+						st[i - 1][j + (3 << ((i - 1) << 1))]
+					)
 				);
 			}
 		}
@@ -60,10 +40,6 @@ struct SparseTable {
 		}
 	}
 };
-
-template<typename Init, typename Func>
-SparseTable(int, Init&&, Func&&) ->
-SparseTable<std::invoke_result_t<Init, int>, Func>;
 
 template<typename Iter, typename Func>
 SparseTable (const Iter&, const Iter&, Func&&) ->
