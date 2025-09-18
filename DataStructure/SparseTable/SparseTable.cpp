@@ -11,18 +11,9 @@ struct SparseTable {
     template<typename Iterator, typename = std::_RequireInputIter<Iterator>>
     SparseTable (const Iterator& l, const Iterator& r, Func&& f) : n(r - l), op(f) {
         st.assign(std::__lg(n) + 1, std::vector<T> (n + 1));
-        for (int i = 1; i <= n; ++i) st[0][i] = *(l + i - 1);
-        build();
-    }
-    
-    template<typename Init>
-    SparseTable (int n, Init&& op, Func&& f) : n(n), op(f) {
-        st.assign(std::__lg(n) + 1, std::vector<T> (n + 1));
-        for (int i = 1; i <= n; ++i) st[0][i] = op(i);
-        build();
-    }
-
-    void build() {
+        for (int i = 1; i <= n; ++i) {
+            st[0][i] = l[i - 1];
+        }
         for (int i = 1; i <= std::__lg(n); ++i) {
             for (int j = 1; j + (1 << i) - 1 <= n; ++j) {
                 st[i][j] = op(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
