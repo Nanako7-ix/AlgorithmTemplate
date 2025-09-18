@@ -1,52 +1,54 @@
 #include <bits/stdc++.h>
 
-template<typename Info>
-struct Fenwick {
-public:
-	Fenwick () = default;
+template<typename T>
+struct BIT {
+    int n;
+	std::vector<T> tr;
+	constexpr int lowbit(int x) { return x & -x; }
 
-	Fenwick (int n, Info e = {}) { init(n, e); }
+	BIT () = default;
+	BIT (int n, T e = {}) { init(n, e); }
 
-	template<typename Iterator, typename = std::_RequireInputIter<Iterator>>
-	Fenwick (const Iterator& l, const Iterator& r) { init(l, r); }
+	template<typename Iter, typename = std::_RequireInputIter<Iter>>
+	BIT (const Iter& l, const Iter& r) { init(l, r); }
 
-	void init (int n, Info e = {}) {
-		vector<Info> _(n, e);
+	void init (int n, T e = {}) {
+		std::vector<T> _(n, e);
 		init(_.begin(), _.end());
 	}
 
-	template<typename Iterator, typename = std::_RequireInputIter<Iterator>>
-	void init (const Iterator& l, const Iterator& r) {
+	template<typename Iter, typename = std::_RequireInputIter<Iter>>
+	void init (const Iter& l, const Iter& r) {
 		n = r - l;
-		tr.assign(n + 1, Info {});
+		tr.assign(n + 1, T {});
 		for(int i = 1; i <= n; ++i) {
-			tr[i] += *(l + i - 1);
+			tr[i] += l[i - 1];
 			if(i + lowbit(i) <= n) {
 				tr[i + lowbit(i)] += tr[i];
 			}
 		}
 	}
 
-	void modify (int p, const Info& v) {
+	void modify (int p, const T& v) {
 		for(; p <= n; p += lowbit(p)) {
 			tr[p] += v;
 		}
 	}
 
-	Info query (int p) {
-		Info res{};
+	T query (int p) {
+        T res {};
 		for(; p; p -= lowbit(p)) {
 			res += tr[p];
 		}
 		return res;
 	}
 
-	Info query (int l, int r) {
+	T query (int l, int r) {
 		assert(l <= r && l != 0);
 		return query(r) - query(l - 1);
 	}
 
-	int lower_bound (Info k) {
+	int lower_bound (T k) {
 		int x = 0;
 		for(int i = 1 << std::__lg(n); i; i >>= 1)
 			if(x + i <= n && tr[x + i] < k)
@@ -54,16 +56,33 @@ public:
 		return x + 1;
 	}
 
-	int upper_bound (Info k) {
+	int upper_bound (T k) {
 		int x = 0;
 		for(int i = 1 << std::__lg(n); i; i >>= 1)
 			if(x + i <= n && tr[x + i] <= k)
 				k -= tr[x += i];
 		return x + 1;
 	}
-
-private:
-	int n;
-	std::vector<Info> tr;
-	constexpr int lowbit(int x) { return x & -x; }
 };
+
+int main () {
+    int n, m;
+    std::cin >> n >> m;
+
+    std::vector<int> a(n + 1);
+    for (int i = 1; i <= n; ++i) {
+        std::cin >> a[i];
+    }
+
+    BIT<int> tr(a.begin() + 1, a.end());
+    for (int i = 1; i <= m; ++i) {
+        int op, x, y;
+        std::cin >> op >> x >> y;
+        if (op == 1) {
+            tr.modify(x, y);
+        } else {
+            std::cout << tr.query(x, y) << "\n";
+        }
+    }
+    return 0;
+}
