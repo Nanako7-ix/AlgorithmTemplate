@@ -82,16 +82,23 @@ struct SegmentTree {
 
 	template<typename Func>
 	int findL(int L, int R, Func&& f, int u, int l, int r) {
-		if (l > R || r < L || !f(info[u])) {
-			return n + 1;
+		if (L <= l && r <= R) {
+			if (l == r) return l;
+			int m = (l + r) >> 1;
+			if (f(info[ls])) {
+				return findL(L, R, f, ls, l, m);
+			} else if (f(info[rs])) {
+				return findL(L, R, f, rs, m + 1, r);
+			} return n + 1;
 		}
-		if (l == r) return l;
 		int m = (l + r) >> 1;
-		int p = findL(L, R, f, ls, l, m);
-		if (p > n) {
-			p = findL(L, R, f, rs, m + 1, r);
+			if (R <= m) {
+			return findL(L, R, f, ls, l, m);
+		} else if (L > m) {
+			return findL(L, R, f, rs, m + 1, r);
+		} else {
+			return query(L, R, ls, l, m) + query(L, R, rs, m + 1, r);
 		}
-		return p;
 	}
 
 	template<typename Func>

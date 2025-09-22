@@ -15,13 +15,3 @@ constexpr T ceil_sqrt (T n) {
 	while ((t - 1) * (t - 1) >= n) --t;
 	return t;
 }
-
-template<std::signed_integral T>
-constexpr T floor_div(T a, T b) {
-	return a / b;
-}
-
-template<std::signed_integral T>
-constexpr T ceil_div(T a, T b) {
-	return (a - 1) / b + 1;
-}

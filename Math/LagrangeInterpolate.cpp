@@ -23,7 +23,7 @@ auto g = []() {
 } ();
 
 template<typename T>
-T lagrangeIota(T x, const std::vector<T>& y) {
+T lagrange_iota(T x, const std::vector<T>& y) {
 	int n = y.size();
 	if (x < n) return y[x.val()];
 
@@ -48,10 +48,10 @@ T lagrangeIota(T x, const std::vector<T>& y) {
 }
 
 template<typename T>
-T lagrangeAny(T x, const std::vector<std::pair<T, T>>& f) {
+T lagrange_any(T x, const std::vector<std::pair<T, T>>& f) {
 	T ans = 0; int n = f.size();
 	for (int i = 0; i < n; ++i) {
-		Z u = 1, d = 1;
+		T u = 1, d = 1;
 		auto& [xi, yi] = f[i];
 		for (int j = 0; j < n; ++j) {
 			if (i == j) continue;

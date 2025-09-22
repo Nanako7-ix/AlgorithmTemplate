@@ -31,4 +31,3 @@ struct SparseTable {
 template<typename Iter, typename Func>
 SparseTable (const Iter&, const Iter&, Func&&) ->
 SparseTable<typename std::iterator_traits<Iter>::value_type, Func>;
-
