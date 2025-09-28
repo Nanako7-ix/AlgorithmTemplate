@@ -46,3 +46,24 @@ struct MooreVote {
 };
 #undef v
 #undef c
+
+template<typename T>
+struct MooreVote<T, 2> {
+	T v; i64 c;
+	
+	MooreVote () { v = T(), c = 0; }
+	
+	MooreVote (const T& e, i64 cnt = 1) {
+		v = e, c = cnt;
+	}
+	
+	friend MooreVote operator+(MooreVote x, MooreVote y) {
+		if (x.v == y.v) {
+			return { x.v, x.c + y.c };
+		} else if (x.c <= y.c) {
+			return { y.v, y.c - x.c };			
+		} else {
+			return { x.v, x.c - y.c };
+		}
+	}
+};
