@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 
+using f64 = double;
+
 template<typename T>
 struct Point {
 	using value_type = T;
@@ -25,8 +27,19 @@ struct Point {
 	friend bool operator== (const Point& x, const Point& y) { return x.x == y.x && x.y == y.y; }
 	friend auto operator<=>(const Point& x, const Point& y) = default;
 	
-	friend istream& operator>> (istream& is, Point& p) { return is >> p.x >> p.y; }
-	friend ostream& operator<< (ostream& os, const Point& p) { return os << "(" << p.x << ", " << p.y << ")"; }
+	friend std::istream& operator>> (std::istream& is, Point& p) { return is >> p.x >> p.y; }
+	friend std::ostream& operator<< (std::ostream& os, const Point& p) { return os << "(" << p.x << ", " << p.y << ")"; }
 
 	T square() const { return dot(*this); }
+	double length() const { return std::sqrt(dot(*this)); }
+	double angle() const { return std::atan2(y, x); }
+
+	Point<double> rotate(double k) const {
+		return Point<double>(
+			x * std::cos(k) - y * std::sin(k),
+			x * std::sin(k) + y * std::cos(k)
+		);
+	}
+
+	template<typename U> operator Point<U>() const { return Point<U> (U(x), U(y)); }
 };
