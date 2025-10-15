@@ -1,8 +1,9 @@
+// validated by: https://judge.yosupo.jp/submission/320581
 #include <bits/stdc++.h>
 
-auto ZFunction(std::string s) {
+auto ZAlgorithm(const std::string& s) {
 	int n = s.size();
-	std::vector<int> z(n);
+	std::vector<int> z(n + 1);
 	z[0] = n;
 	for (int i = 1, j = 1; i < n; ++i) {
 		z[i] = std::max(0, std::min(j + z[j] - i, z[i - j]));

@@ -1,29 +1,25 @@
-#include <bits/stdc++.h>
-
-using i64 = long long;
-
 std::vector<int> minp, P;
-std::vector<i64> mu;
+std::vector<i64> f;
 
 void sieve(int n) {
 	minp.assign(n + 1, 0);
 	P.clear();
-	mu.assign(n + 1, 0); mu[1] = 1;
+	f.assign(n + 1, 0); f[1] = 1;
 
 	std::vector<int> h(n + 1, 0);
 	for(int i = 2; i <= n; ++i) {
 		if(minp[i] == 0) {
 			P.push_back(h[i] = minp[i] = i);
-			mu[i] = -1;
+			f[i] = ?;
 		}
 		for(i64 p : P) {
 			i64 x = i * p;
 			if(x > n) break;
 			h[x] = (minp[x] = p) * (i % p ? 1 : h[i]);
 			if(x == h[x]) {
-				mu[x] = 0;
+				f[x] = ?;
 			} else {
-				mu[x] = mu[h[x]] * mu[x / h[x]];
+				f[x] = f[h[x]] * f[x / h[x]];
 			}
 			if(i % p == 0) break;
 		}

@@ -161,8 +161,4 @@ struct SegmentTreePool {
 	[[nodiscard]] int merge(int u, int v, Func&& op) {
 		return merge(u, v, x, y, op);
 	}
-
-	// int split(int p, int u, int l, int r) {
-
-	// }
 };

@@ -43,17 +43,25 @@ struct Bitset {
 
 	void set() {
 		int len = d.size();
-		for (int i = 0; i < n; ++i) {
-			d[i] = ~U(0);
+		for (int i = 0; i < len; ++i) {
+			d[i] = U(-1);
 		}
 		trim();
 	}
 
 	void reset() {
 		int len = d.size();
-		for (int i = 0; i < n; ++i) {
+		for (int i = 0; i < len; ++i) {
 			d[i] = U(0);
 		}
+	}
+
+	void flip() {
+		int len = d.size();
+		for (int i = 0; i < len; ++i) {
+			d[i] = ~d[i];
+		}
+		trim();
 	}
 
 	Proxy operator[] (int p) {
@@ -72,8 +80,7 @@ struct Bitset {
 		for (int i = 0; i < len; ++i) {
 			res.d[i] = ~d[i];
 		}
-		int r = n / B;
-		if (r) res.d.back() &= (U(1) << r) - 1;
+		res.trim();
 		return res;
 	}
 
@@ -102,8 +109,6 @@ struct Bitset {
 			d[i] ^= o.d[i];
 		}
 		return *this;
-		bitset<1> x;
-		x >>= 1;
 	}
 
 	Bitset& operator<<=(const int& k) & {
@@ -123,8 +128,8 @@ struct Bitset {
 		for (int i = 0; i < len - x - 1; ++i) {
 			d[i] = d[i + x] >> y | d[i + x + 1] << z;
 		}
-		if (len - x - 1 >= 0) d[len - x - 1] = d[len] >> y;
-		for (int i = max(len - x, 0); i < len; ++i) {
+		if (x <= len - 1) d[len - x - 1] = d[len] >> y;
+		for (int i = std::max(len - x, 0); i < len; ++i) {
 			d[i] = 0;
 		}
 		return *this;
@@ -148,11 +153,6 @@ struct Bitset {
 		return (*this >> l).count() - (*this >> (r + 1)).count();
 	}
 
-	bool any() const {
-		return count() != 0;
-	}
-
-	bool all() const {
-		return count() == n;
-	}
+	bool any() const { return count() != 0; }
+	bool all() const { return count() == n; }
 };

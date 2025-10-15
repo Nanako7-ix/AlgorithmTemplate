@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 
-using f64 = double;
-
 template<typename T>
 struct Point {
 	using value_type = T;

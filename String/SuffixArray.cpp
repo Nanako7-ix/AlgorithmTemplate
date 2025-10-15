@@ -1,5 +1,10 @@
+// validated by: https://judge.yosupo.jp/submission/320707
+// validated by: https://judge.yosupo.jp/submission/320708
+// validated by: https://judge.yosupo.jp/submission/320713
 #include <bits/stdc++.h>
 
+//  input: 0-based
+// output: 1-based
 auto SuffixArray(const std::string& s) {
 	int n = s.size();
 	std::vector<int> sa(n + 1), rk(n + 1);

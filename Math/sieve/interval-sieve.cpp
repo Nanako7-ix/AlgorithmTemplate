@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-
-using i64 = long long;
-
 std::vector<int> P;
 
 std::vector<int> interval_sieve(i64 l, i64 r) {
