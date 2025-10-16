@@ -1,8 +1,7 @@
 // validated by: https://judge.yosupo.jp/submission/320606
 #include <bits/stdc++.h>
 
-// input: 0-based
-// idx(s[i]) = 2i
+// input: 0-based, idx(s[i]) = 2i
 std::vector<int> Manacher(const std::string& t) {
 	std::string s = "#";
 	for (auto& ch : t) {

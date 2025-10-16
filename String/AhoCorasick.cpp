@@ -1,8 +1,21 @@
+// validated by: https://www.luogu.com.cn/record/240969232
 #include <bits/stdc++.h>
 
-struct AhoCorasick {
-public:
-	AhoCorasick(int n = 0) {
+// 记得 work
+// 树根 "" 为 1 号节点
+// adj 为失配树的子节点
+struct ACAM {
+	static constexpr int N = 26;
+	struct Node {
+		int len, fail;
+		std::vector<int> adj;
+		std::array<int, N> next;
+		Node() : len(0), fail(0), adj{}, next{} {}
+	};
+
+	std::vector<Node> t;
+
+	ACAM (int n = 0) {
 		t.reserve(n);
 		t.assign(2, Node());
 		t[0].next.fill(1);
@@ -56,7 +69,7 @@ public:
 		return t[p].fail;
 	}
 
-	const std::vector<int>& adj(int p) {
+	const std::vector<int>& adj(int p) const {
 		return t[p].adj;
 	}
 
@@ -67,15 +80,4 @@ public:
 	int size() {
 		return t.size();
 	}
-
-private:
-	static constexpr int N = 26;
-	struct Node {
-		int len, fail;
-		std::vector<int> adj;
-		std::array<int, N> next;
-		Node() : len(0), fail(0), adj{}, next{} {}
-	};
-
-	std::vector<Node> t;
 };

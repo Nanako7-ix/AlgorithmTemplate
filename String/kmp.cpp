@@ -4,8 +4,7 @@
 // validated by: https://www.luogu.com.cn/record/240699257
 // validated by: https://www.luogu.com.cn/record/240699932
 
-//  input: 0-based
-// output: 1-based
+// input: 0-based, output: 1-based
 auto getFail (const std::string& s) {
 	int n = s.size();
 	std::vector<int> fail(n + 1);
@@ -18,8 +17,7 @@ auto getFail (const std::string& s) {
 
 // validated by: https://www.luogu.com.cn/record/240699257
 
-//  input: 0-based
-// output: 1-based
+// input: 0-based, output: 1-based
 auto getTrans(const std::string& s) {
 	int n = s.size();
 	auto fail = getFail(s);
@@ -36,8 +34,7 @@ auto getTrans(const std::string& s) {
 
 // validated by: https://www.luogu.com.cn/record/240699932
 
-//  input: 0-based
-// output: 0-based
+// input: 0-based, output: 0-based
 auto occurrence(const std::string& s, const std::string& t) {
 	int n = s.size(), m = t.size();
 	auto fail = getFail(t);

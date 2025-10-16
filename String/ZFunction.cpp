@@ -1,7 +1,8 @@
 // validated by: https://judge.yosupo.jp/submission/320581
 #include <bits/stdc++.h>
 
-auto ZAlgorithm(const std::string& s) {
+// input: 0-based, output: 0-based
+auto ZFunction(const std::string& s) {
 	int n = s.size();
 	std::vector<int> z(n + 1);
 	z[0] = n;
