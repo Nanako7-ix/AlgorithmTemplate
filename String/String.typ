@@ -538,3 +538,96 @@ struct ACAM {
 	int size()                         const { return t.size(); }
 };
 ```
+
+#set page(margin: (x: 1.0cm, y: 1cm))
+
+= String Hash
+
+#v(0.7em)
+
+这几条式子 `0-based` 和 `1-based` 都能用
+
+== Basic String Hash
+
+#set text(size: 1.2em)
+
+#pad(left: 34.42%)[#rect(
+	$
+		#v(2.7em)
+		"Hash"(s, x) &= sum_(i=1)^(|s|) s_i x^(|s| - i)
+	$
+)]
+
+#pad(left: 13.92%)[#rect()[
+	$
+	#v(2.7em)
+	"Hash"(s[l, r], x) = "Hash"(s[1, r], x) - "Hash"(s[1, l-1], x) dot x^(r - l + 1)
+	$
+]]
+
+#set text(size: 0.83333333333333333333333333333333em)
+
+== Reverse String Hash
+
+#set text(size: 1.2em)
+
+#v(0.2em)
+
+#pad(left: 26.9%)[#rect(
+$
+#v(2.7em)
+"Hash"(overline(s), x) = x^(|s| - 1) dot "Hash"(s, x^(-1))
+$
+)]
+
+#pad(left: 22.8%)[#rect(
+$
+#v(2.5em)
+"Hash"(overline(s[l, r]), x) = x^(r-l) "Hash"(s[l, r], x^(-1))
+$
+)]
+
+#set text(size: 0.83333333333333333333333333333333em)
+
+== 2D String Hash
+
+#set text(size: 1.2em)
+
+#pad(left: 23.5%)[#rect(
+	$
+		#v(2.7em)
+		"Hash"(A, x, y) &= sum_(i=1)^(n) sum_(j=1)^(m) A_(i j) x^(n - i) y^(m - j)
+	$
+)]
+
+
+#pad(left: 0%)[#rect()[$
+	#v(2.0em)
+	"Hash"(A[l_x, r_x][l_y, r_y], x, y)
+	=& "Hash"(A[1, r_x][1, r_y], x, y)\
+	-& "Hash"(A[1, l_x-1][1, r_y], x, y) dot x^(r_x - l_x + 1)\
+	-& "Hash"(A[1, r_x][1, l_y-1], x, y) dot y^(r_y - l_y + 1)\
+	+& "Hash"(A[1, l_x-1][1, l_y-1], x, y) dot x^(r_x - l_x + 1)y^(r_y - l_y + 1)\
+$]]
+
+#set text(size: 0.83333333333333333333333333333333em)
+
+如果需要求 Reverse 的哈希值， 哪个方向反转就把对应的 base 改成逆元即可.
+
+随机生成了一些素数（不保证质量），可能会用到：
+
+#set text(size: 0.783137em)
+
+$
+3 times & 10^(2):  179 quad  191 quad  211 quad  227 quad  251 quad  311 quad  313 quad  347 quad  349 quad  353 quad  379 quad  389 quad  397 quad  419\
+1 times & 10^(6):  950569 quad  959449 quad  960703 quad  961531 quad  972623 quad  1016681 quad  1063619\
+1 times & 10^(8):  123634409 quad  224247619 quad  566424149 quad  687587993 quad  775262303 quad  872340281\
+1 times & 10^(12): 992345236997 quad  995678562787 quad  1023452343671 quad  1045674564469\
+1 times & 10^(13): 10123412340917 quad  10123412346533 quad  10234523455957 quad  10567856781973\
+2 times & 10^(13): 19234523459539 quad  19345634567977 quad  20234523454021 quad  20567856785261\
+1 times & 10^(15): 995678567851157 quad  1045674567457081 quad  1045674567459773\
+1 times & 10^(17): 101234123412348037 quad  103456345634562587 quad  105678567856789793\
+5 times & 10^(17): 491234123412346679 quad  493456345634561563 quad  502345234523452883\
+1 times & 10^(18): 992345234523451717 quad  994567456745676007 quad  1045674567456745241\
+2 times & 10^(18): 1956785678567854391 quad  1956785678567855843 quad  2056785678567853529
+$
