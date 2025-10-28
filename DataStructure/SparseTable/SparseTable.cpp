@@ -21,6 +21,19 @@ struct SparseTable {
 		}
 	}
 
+	template<typename Array>
+	SparseTable (int n, Array&& a, Func&& f) : n(n), op(f) {
+		st.assign(std::__lg(n) + 1, std::vector<T> (n + 1));
+		for (int i = 1; i <= n; ++i) {
+			st[0][i] = a(i);
+		}
+		for (int i = 1; i <= std::__lg(n); ++i) {
+			for (int j = 1; j + (1 << i) - 1 <= n; ++j) {
+				st[i][j] = op(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
+			}
+		}
+	}
+
 	T operator () (int l, int r) {
 		assert(l <= r);
 		int k = std::__lg(r - l + 1);
@@ -31,3 +44,7 @@ struct SparseTable {
 template<typename Iter, typename Func>
 SparseTable (const Iter&, const Iter&, Func&&) ->
 SparseTable<typename std::iterator_traits<Iter>::value_type, Func>;
+
+template<typename Array, typename Func>
+SparseTable (int, Array&&, Func&&) ->
+SparseTable<std::invoke_result_t<Array, int>, Func>;
