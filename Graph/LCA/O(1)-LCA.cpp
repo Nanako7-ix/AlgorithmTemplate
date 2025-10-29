@@ -5,9 +5,10 @@ struct LCA {
 	std::vector<std::vector<int>> adj, st;
 	std::vector<int> fa, dep, dfn, siz;
 	
+	LCA() = default;
 	LCA (int n) { init(n); }
 	
-	void init (int n) {
+	void init(int n) {
 		this -> n = n;
 		tot = 0;
 		adj.assign(n + 1, {});
@@ -18,12 +19,12 @@ struct LCA {
 		siz.assign(n + 1, 0);
 	}
 	
-	void add (int u, int v) {
+	void add(int u, int v) {
 		adj[u].emplace_back(v);
 		adj[v].emplace_back(u);
 	}
 	
-	void dfs (int u) {
+	void dfs(int u) {
 		if(fa[u] != 0) adj[u].erase(find(adj[u].begin(), adj[u].end(), fa[u]));
 		siz[u] = 1;
 		st[0][dfn[u] = ++tot] = u;
@@ -34,11 +35,11 @@ struct LCA {
 		}
 	}
 	
-	int merge (int x, int y) {
+	int merge(int x, int y) {
 		return dep[x] < dep[y] ? x : y;
 	}
 	
-	void work (int rt = 1) {
+	void work(int rt = 1) {
 		dep[rt] = 1;
 		dfs(rt);
 		for(int i = 1; i <= std::__lg(n); ++i) {
@@ -56,7 +57,6 @@ struct LCA {
 		return fa[merge(st[len][u + 1], st[len][v - (1 << len) + 1])];
 	}
 	
-	// 下面是辅助性函数
 	bool isAncester(int f, int u) {
 		return operator()(f, u) == f;
 	}

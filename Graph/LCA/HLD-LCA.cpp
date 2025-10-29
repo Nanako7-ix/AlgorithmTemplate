@@ -5,10 +5,10 @@ struct HLD {
 	std::vector<std::vector<int>> adj;
 	std::vector<int> dfn, idfn, siz, fa, top, dep;
 
-	HLD () = default;
-	HLD (int n) { init(n); }
+	HLD() = default;
+	HLD(int n) { init(n); }
 	
-	void init (int n) {
+	void init(int n) {
 		this -> n = n;
 		tot = 0;
 		adj.assign(n + 1, {});
@@ -20,16 +20,16 @@ struct HLD {
 		dep.assign(n + 1, 0);
 	}
 	
-	void add (int u, int v) {
+	void add(int u, int v) {
 		adj[u].push_back(v);
 		adj[v].push_back(u);
 	}
 	
-	void work (int rt = 1) {
+	void work(int rt = 1) {
 		dfs1(rt), dfs2(rt);
 	}
 	
-	void dfs1 (int u) {
+	void dfs1(int u) {
 		if (fa[u] != 0) {
 			adj[u].erase(find(adj[u].begin(), adj[u].end(), fa[u]));
 		}
@@ -44,7 +44,7 @@ struct HLD {
 		}
 	}
 	
-	void dfs2 (int u) {
+	void dfs2(int u) {
 		dfn[u] = ++tot;
 		idfn[tot] = u;
 		for (auto v : adj[u]) {
@@ -53,7 +53,7 @@ struct HLD {
 		}
 	}
 
-	int lca (int u, int v) {
+	int lca(int u, int v) {
 		while (top[u] != top[v]) {
 			if (dep[top[u]] > dep[top[v]]) {
 				u = fa[top[u]];
@@ -64,8 +64,7 @@ struct HLD {
 		return dep[u] < dep[v] ? u : v;
 	}
 
-	// 下面是辅助性函数
-	int jump (int u, int k) {
+	int jump(int u, int k) {
 		assert(dep[u] >= k);
 		int d = dep[u] - k;
 		while (dep[top[u]] > d) {
@@ -74,11 +73,11 @@ struct HLD {
 		return idfn[dfn[u] - dep[u] + d];
 	}
 	
-	bool isAncester (int f, int u) {
+	bool isAncester(int f, int u) {
 		return dfn[f] <= dfn[u] && dfn[u] < dfn[f] + siz[f];
 	}
 	
-	int rootedParent (int rt, int u) {
+	int rootedParent(int rt, int u) {
 		if (rt == u) return rt;
 		if (!isAncester(u, rt)) return fa[u];
 		auto it = std::upper_bound(adj[u].begin(), adj[u].end(), rt, [&](int x, int y) {
@@ -87,13 +86,13 @@ struct HLD {
 		return *it;
 	}
 	
-	int rootedSize (int rt, int u) {
+	int rootedSize(int rt, int u) {
 		if (rt == u) return n;
 		if (!isAncester(u, rt)) return siz[u];
 		return n - siz[rootedParent(rt, u)];
 	}
 	
-	int rootedLca (int rt, int u, int v) {
+	int rootedLca(int rt, int u, int v) {
 		return lca(rt, u) ^ lca(u, v) ^ lca(v, rt);
 	}
 };

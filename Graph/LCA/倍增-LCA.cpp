@@ -15,7 +15,6 @@ void solve() {
 			}
 			fa[0][v] = u;
 			dfs(dfs, v);
-			
 		}
 	}; dfs(dfs, rt);
 
