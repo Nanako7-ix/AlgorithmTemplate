@@ -46,11 +46,10 @@ struct SCC {
 		}
 	}
 
-	std::vector<int> work() {
+	void work() {
 		for (int i = 1; i <= n; i++) {
 			if (dfn[i] == 0) tarjan(i);
 		}
-		return bel;
 	}
 
 	auto getGraph() {
@@ -63,6 +62,6 @@ struct SCC {
 				}
 			}
 		}
-		return std::pair { cnt, adj };
+		return std::pair { cnt, std::move(adj) };
 	}
 };
