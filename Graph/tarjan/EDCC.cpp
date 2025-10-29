@@ -7,7 +7,8 @@ struct EDCC {
 	std::vector<std::array<int, 2>> cut;
 	std::vector<std::vector<std::array<int, 2>>> adj;
 
-	EDCC(int n = 0) { init(n); }
+	EDCC() = default;
+	EDCC(int n) { init(n); }
 
 	void init(int n) {
 		this -> n = n;

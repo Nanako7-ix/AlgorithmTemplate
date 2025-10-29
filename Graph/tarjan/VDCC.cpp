@@ -5,7 +5,8 @@ struct VDCC {
 	std::vector<std::vector<int>> adj, vdcc;
 	std::vector<int> dfn, low, stk, cut;
 
-	VDCC (int n = 0) { init(n); }
+	VDCC() = default;
+	VDCC (int n) { init(n); }
 
 	void init(int n) {
 		this -> n = n;
