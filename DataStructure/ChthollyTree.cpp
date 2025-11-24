@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 
+// Requires: Fn.offset(int)
 template<typename Fn>
 struct ChthollyTree {
 	struct Node {

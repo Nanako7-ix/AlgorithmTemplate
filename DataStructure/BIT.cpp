@@ -1,16 +1,13 @@
-template<typename T, int Base = 1>
+template<typename T>
 struct BIT {
-	constexpr static int offset = 1 - Base;
 	int n;
 	std::vector<T> tr;
-	constexpr int lowbit(int x) { return x & -x; }
+	constexpr int lowbit(int x) { return ; }
 
 	BIT () = default;
-
 	BIT (int n, const T& e = T()) { init(n, e); }
 
-	template<typename Func>
-	BIT (int n, Func&& f) { init(n, f); }
+	template<typename Array> BIT (int n, Array&& a) { init(n, a); }
 
 	template<typename Iter, typename = std::_RequireInputIter<Iter>>
 	BIT (const Iter& l, const Iter& r) { init(l, r); }
@@ -24,55 +21,49 @@ struct BIT {
 		init(r - l, [&](int p) { return l[p - 1]; });
 	}
 
-	template<typename Func>
-	void init (int n, Func&& f) {
+	template<typename Array>
+	void init (int n, Array&& a) {
 		this -> n = n;
 		tr.assign(n + 1, T {});
 		for(int i = 1; i <= n; ++i) {
-			tr[i] += f(i);
-			if(i + lowbit(i) <= n) {
-				tr[i + lowbit(i)] += tr[i];
+			tr[i] += a(i);
+			if(i + (i & -i) <= n) {
+				tr[i + (i & -i)] += tr[i];
 			}
 		}
 	}
 
 	void modify (int p, const T& v) {
-		p += offset;
-		for(; p <= n; p += lowbit(p)) {
-			tr[p] += v;
-		}
+		for (; p <= n; p += p & -p) tr[p] += v;
 	}
 
-	T query (int p) {
-		p += offset;
-		T res {};
-		for(; p; p -= lowbit(p)) {
-			res += tr[p];
-		}
+	T query (int p) const {
+		T res = T();
+		for (; p; p -= p & -p) res += tr[p];
 		return res;
 	}
 
-	T query (int l, int r) {
+	T query (int l, int r) const {
 		return query(r) - query(l - 1);
 	}
 
-	int lower_bound (T k) {
+	int lower_bound (T k) const {
 		int x = 0;
 		for(int i = 1 << std::__lg(n); i; i >>= 1) {
 			if(x + i <= n && tr[x + i] < k) {
 				k -= tr[x += i];
 			}
 		}
-		return x + 1 - offset;
+		return x + 1;
 	}
 
-	int upper_bound (T k) {
+	int upper_bound (T k) const {
 		int x = 0;
 		for(int i = 1 << std::__lg(n); i; i >>= 1) {
 			if(x + i <= n && tr[x + i] <= k) {
 				k -= tr[x += i];
 			}
 		}
-		return x + 1 - offset;
+		return x + 1;
 	}
 };

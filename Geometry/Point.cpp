@@ -1,8 +1,9 @@
 #include <bits/stdc++.h>
 
-template<typename T>
+template<typename T, typename F>
 struct Point {
 	using value_type = T;
+	using float_type = F;
 	T x, y;
 	Point () : x(0), y(0) {}
 	Point (const T& x, const T& y) : x(x), y(y) { }
@@ -29,15 +30,15 @@ struct Point {
 	friend std::ostream& operator<< (std::ostream& os, const Point& p) { return os << "(" << p.x << ", " << p.y << ")"; }
 
 	T square() const { return dot(*this); }
-	double length() const { return std::sqrt(dot(*this)); }
-	double angle() const { return std::atan2(y, x); }
+	F length() const { return std::sqrt<F>(dot(*this)); }
+	F angle() const { return std::atan2<F>(y, x); }
 
-	Point<double> rotate(double k) const {
-		return Point<double>(
-			x * std::cos(k) - y * std::sin(k),
-			x * std::sin(k) + y * std::cos(k)
+	Point<F> rotate(F k) const {
+		return Point<F>(
+			x * std::cos<F>(k) - y * std::sin<F>(k),
+			x * std::sin<F>(k) + y * std::cos<F>(k)
 		);
 	}
 
-	template<typename U> operator Point<U>() const { return Point<U> (U(x), U(y)); }
+	template<typename _T, typename _F = F> operator Point<_T, _F>() const { return Point<_T, _F> (_T(x), _T(y)); }
 };

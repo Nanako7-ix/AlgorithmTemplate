@@ -2,9 +2,9 @@
 #include <bits/stdc++.h>
 
 // input: 0-based, output: 0-based
-auto ZFunction(const std::string& s) {
+auto zFunction(const std::string& s) {
 	int n = s.size();
-	std::vector<int> z(n + 1);
+	std::vector<int> z(n);
 	z[0] = n;
 	for (int i = 1, j = 1; i < n; ++i) {
 		z[i] = std::max(0, std::min(j + z[j] - i, z[i - j]));

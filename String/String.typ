@@ -2,7 +2,8 @@
 	margin: (x: 1.5cm, y: 1.5cm),
 	header: align(right)[
 		Thephix's Algorithm Template
-	]
+	],
+	numbering: "1"
 )
 #set par(justify: true)
 #set text(size: 1.1em)
@@ -14,6 +15,8 @@
 ])
 
 #set heading(numbering: "1.1")
+
+#outline()
 
 = KMP
 
@@ -76,7 +79,7 @@ auto occurrence(const std::string& s, const std::string& t) {
 ==
 
 ```cpp
-// input: 0-based, idx(s[i]) = 2i
+// input: 0-based, idx(s[i]) = 2i (i: 1-based)
 std::vector<int> Manacher(const std::string& t) {
 	std::string s = "#";
 	for (auto& ch : t) {
@@ -100,7 +103,7 @@ std::vector<int> Manacher(const std::string& t) {
 题意：找最长的子串满足存在一个字符串 S 使得该子串可以被表示成 S+#overline("S")+S+#overline("S"). 显然一个字符串只有 $O(n)$ 个本质不同的回文串，暴力 check 即可
 
 ```cpp
-// input: 0-based, idx(s[i]) = 2i
+// input: 0-based, idx(s[i]) = 2i (i: 1-based)
 int Manacher(const std::string& t) {
 	std::string s = "#";
 	for (auto& ch : t) {
@@ -109,6 +112,8 @@ int Manacher(const std::string& t) {
 
 	int n = s.size() - 1, ans = 0;
 	std::vector<int> d(n + 1);
+
+
 	for (int i = 1, j = 1; i <= n; ++i) {
 		d[i] = i < j + d[j] ? std::min(d[2 * j - i], j + d[j] - i) : 1;
 		while (i + d[i] <= n && i - d[i] >= 1 && s[i - d[i]] == s[i + d[i]]) ++d[i];
@@ -168,6 +173,8 @@ auto SuffixArray(const std::string& s) {
 		rk[sa[i + 1]] = rk[sa[i]] + (s[sa[i + 1] - 1] != s[sa[i] - 1]);
 	}
 
+
+
 	std::vector<int> tmp(n + 1), cnt(n + 1);
 	for (int k = 1; rk[sa[n]] != n; k <<= 1) {
 		for (int i = n - k + 1, j = 1; i <= n; ++i, ++j) {
@@ -219,6 +226,8 @@ auto SuffixArray(const std::string& s) {
 		std::move(height)
 	};
 }
+
+
 ```
 
 == 求 Longest Common Substring
@@ -279,6 +288,7 @@ struct SAM {
 			p = t[p].link;
 		}
 
+
 		int q = t[p].next[c];
 		if (t[q].len == t[p].len + 1) {
 			t[cur].link = q;
@@ -304,9 +314,6 @@ struct SAM {
 	int next(int p, int x) const {return t[p].next[x]; }
 	int size()             const {return t.size(); }
 	i64 count ()           const {return substr; }
-	
-	
-	
 	
 	// [ SAM 节点的个数 (不含空节点), 后缀树 ]
 	auto getTree() {
@@ -339,6 +346,7 @@ if (t == 1) { // 考虑 endpos.size()
 	for (int i = 1; i <= n; ++i) {
 		siz[p[i]]++;
 	}
+	
 	auto dfs = [&](auto &&dfs, int u) -> void {
 		for (auto v : adj[u]) {
 			dfs(dfs, v);
@@ -393,6 +401,7 @@ while (!que.empty()) {
 
 int u = 1;
 string ans;
+
 while (k > siz[u]) {
 	ans.push_back('$');
 	k -= siz[u];
@@ -448,6 +457,9 @@ struct PAM {
 			return p;
 		};
 
+
+
+
 		p = get(p);
 		if (t[p].next[ch] == 0) {
 			int cur = newNode();
@@ -457,7 +469,6 @@ struct PAM {
 				t[cur].fail = t[get(t[p].fail)].next[ch];
 			}
 		}
-
 		return t[p].next[ch];
 	}
 
@@ -484,7 +495,6 @@ struct ACAM {
 	};
 
 	std::vector<Node> t;
-
 	ACAM (int n = 0) {
 		t.reserve(n);
 		t.assign(2, Node());
@@ -505,12 +515,9 @@ struct ACAM {
 			if (t[p].next[x] == 0) {
 				t[p].next[x] = newNode();
 				t[t[p].next[x]].len = t[p].len + 1;
-			}
-			p = t[p].next[x];
-		}
-		return p;
+			} p = t[p].next[x];
+		} return p;
 	}
-
 	void work() {
 		std::queue<int> q;
 		q.push(1);

@@ -1,11 +1,9 @@
 #include <bits/stdc++.h>
-using namespace std;
 
 template<typename T>
-struct MaxFlow {
+struct Flow {
 	struct edge {
-		int v;
-		T cap;
+		int v; T cap;
 		edge(int v, T cap) : v(v), cap(cap) {}
 	};
 
@@ -14,7 +12,8 @@ struct MaxFlow {
 	std::vector<std::vector<int>> g;
 	std::vector<int> cur, h;
 
-	MaxFlow(int n) { init(n); }
+	Flow() = default;
+	Flow(int n) { init(n); }
 
 	void init(int n) {
 		this -> n = n;
@@ -29,19 +28,19 @@ struct MaxFlow {
 	}
 
 	bool bfs(int s, int t) {
-		std::queue<int> q;
+		std::queue<int> que;
 		h.assign(n + 1, 0);
 		h[s] = 1;
-		q.push(s);
-		while (!q.empty()) {
-			int u = q.front();
-			q.pop();
+		que.push(s);
+		while (!que.empty()) {
+			int u = que.front();
+			que.pop();
 			for (auto i : g[u]) {
 				auto [v, cap] = e[i];
 				if (cap > 0 && h[v] == 0) {
 					h[v] = h[u] + 1;
 					if (v == t) return true;
-					q.push(v);
+					que.push(v);
 				}
 			}
 		}
@@ -82,8 +81,9 @@ struct MaxFlow {
 		return x;
 	}
 
-	auto edges() -> std::vector<tuple<int, int, T, T>> {
-		std::vector<tuple<int, int, T, T>> E;
+	using Edge = std::tuple<int, int, T, T>;
+	auto edges() -> std::vector<Edge> {
+		std::vector<Edge> E;
 		for (int i = 0; i < (int) e.size(); i += 2) {
 			E.emplace_back(
 				e[i + 1].v,

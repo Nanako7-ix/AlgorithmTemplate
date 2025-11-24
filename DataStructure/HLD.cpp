@@ -1,13 +1,12 @@
 #include <bits/stdc++.h>
 
 struct HLD {
-	int n, tot;
+	int n = 0, tot = 0;
 	std::vector<std::vector<int>> adj;
 	std::vector<int> dfn, idfn, siz, fa, top, dep;
 
 	HLD() = default;
 	HLD(int n) { init(n); }
-	
 	void init(int n) {
 		this -> n = n;
 		tot = 0;
@@ -19,18 +18,18 @@ struct HLD {
 		top.assign(n + 1, 0);
 		dep.assign(n + 1, 0);
 	}
-	
+
 	void add(int u, int v) {
 		adj[u].push_back(v);
 		adj[v].push_back(u);
 	}
-	
+
 	void work(int root = 1) {
 		dfs1(root);
 		top[root] = root;
 		dfs2(root);
 	}
-	
+
 	void dfs1(int u) {
 		if (fa[u] != 0) {
 			adj[u].erase(find(adj[u].begin(), adj[u].end(), fa[u]));
@@ -45,7 +44,7 @@ struct HLD {
 			}
 		}
 	}
-	
+
 	void dfs2(int u) {
 		dfn[u] = ++tot;
 		idfn[tot] = u;
@@ -74,27 +73,27 @@ struct HLD {
 		}
 		return idfn[dfn[u] - dep[u] + d];
 	}
-	
-	bool isAncester(int f, int u) {
-		return dfn[f] <= dfn[u] && dfn[u] < dfn[f] + siz[f];
+
+	template<typename Callback>
+	void subtree(int u, Callback&& fn) {
+		fn(dfn[u], dfn[u] + siz[u] - 1);
 	}
-	
-	int rootedParent(int rt, int u) {
-		if (rt == u) return rt;
-		if (!isAncester(u, rt)) return fa[u];
-		auto it = std::upper_bound(adj[u].begin(), adj[u].end(), rt, [&](int x, int y) {
-			return dfn[x] < dfn[y];
-		}) - 1;
-		return *it;
-	}
-	
-	int rootedSize(int rt, int u) {
-		if (rt == u) return n;
-		if (!isAncester(u, rt)) return siz[u];
-		return n - siz[rootedParent(rt, u)];
-	}
-	
-	int rootedLca(int rt, int u, int v) {
-		return lca(rt, u) ^ lca(u, v) ^ lca(v, rt);
+
+	template<typename Callback>
+	void path(int u, int v, Callback&& fn) {
+		while (top[u] != top[v]) {
+			if (dep[top[u]] > dep[top[v]]) {
+				fn(dfn[top[u]], dfn[u]);
+				u = fa[top[u]];
+			} else {
+				fn(dfn[top[v]], dfn[v]);
+				v = fa[top[v]];
+			}
+		}
+		if (dep[u] < dep[v]) {
+			fn(dfn[u], dfn[v]);
+		} else {
+			fn(dfn[v], dfn[u]);
+		}
 	}
 };

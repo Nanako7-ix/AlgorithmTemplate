@@ -6,6 +6,12 @@ struct SegmentTreePool {
 	std::vector<Info> info;
 	std::vector<int> ls, rs;
 
+	void reserve(int n) {
+		info.reserve(n);
+		ls.reserve(n);
+		rs.reserve(n);
+	}
+
 	SegmentTreePool(int x, int y, Info e = {}) {
 		init(x, y, e);
 	}

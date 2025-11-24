@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 #include "Point.cpp"
 
-template<typename T, typename Iter>
-bool point_in_polygon(const Point<T>& p, const Iter& l, const Iter& r) {
+template<typename T, typename F, typename Iter>
+bool point_in_polygon(const Point<T, F>& p, const Iter& l, const Iter& r) {
 	int n = r - l;
 	for (int i = 0; i < n; ++i) {
-		Point<T> u = l[i], v = l[(i + 1) % n];
+		Point<T, F> u = l[i], v = l[(i + 1) % n];
 		if (
 			(p - u).cross(p - v) == 0 &&
 			std::min(u.x, v.x) <= p.x && p.x <= std::max(u.x, v.x) &&
@@ -15,7 +15,7 @@ bool point_in_polygon(const Point<T>& p, const Iter& l, const Iter& r) {
 
 	bool ret = false;
 	for (int i = 0; i < n; ++i) {
-		Point<T> u = l[i], v = l[(i + 1) % n];
+		Point<T, F> u = l[i], v = l[(i + 1) % n];
 		if (u.x < p.x && p.x <= v.x && (p - v).corss(u - v) > 0) {
 			ret ^= 1;
 		}

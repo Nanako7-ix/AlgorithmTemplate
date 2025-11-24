@@ -9,10 +9,7 @@ struct MooreVote {
 	
 	array<Vote, N> d;
 	
-	MooreVote () {
-		d.fill(Vote { T(), 0 });
-	}
-	
+	MooreVote () { d.fill(Vote { T(), 0 }); }
 	MooreVote (const T& e, i64 cnt = 1) {
 		d.fill(Vote { T(), 0 });
 		d[0] = Vote { e, cnt };
@@ -52,7 +49,6 @@ struct MooreVote<T, 2> {
 	T v; i64 c;
 	
 	MooreVote () { v = T(), c = 0; }
-	
 	MooreVote (const T& e, i64 cnt = 1) {
 		v = e, c = cnt;
 	}

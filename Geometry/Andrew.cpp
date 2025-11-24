@@ -18,4 +18,9 @@ auto Andrew(Iter l, Iter r) {
 	u.resize(x), d.resize(y);
 
 	return std::pair { u, d };
+
+	// if (u.back() == d[0]) u.pop_back();
+	// if (d.back() == u[0]) d.pop_back();
+	// d.insert(d.end(), u.rbegin(), u.rend());	
+	// return d;
 }

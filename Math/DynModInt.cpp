@@ -7,7 +7,7 @@ using u128 = unsigned __int128;
 
 template<std::unsigned_integral U>
 constexpr U exgcd(U a, U b, U& x, U& y) {
-	if(b == 0) {
+	if (b == 0) {
 		x = 1, y = 0;
 		return a;
 	}
